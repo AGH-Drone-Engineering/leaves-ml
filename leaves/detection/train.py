@@ -11,10 +11,11 @@ def train():
     trainer = pl.Trainer(
         accelerator='gpu',
         devices=1,
-        max_epochs=1,
+        val_check_interval=0.25,
     )
     
     trainer.fit(model, data)
+    trainer.test(model, data)
 
 
 if __name__ == '__main__':
