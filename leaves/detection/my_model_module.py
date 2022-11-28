@@ -10,7 +10,7 @@ TRANSFORM = SSDLite320_MobileNet_V3_Large_Weights.DEFAULT.transforms()
 class MyModelModule(pl.LightningModule):
     def __init__(self):
         super().__init__()
-        self.model = ssdlite320_mobilenet_v3_large()
+        self.model = ssdlite320_mobilenet_v3_large(num_classes=2)
         self.val_mAP = MeanAveragePrecision()
         self.test_mAP = MeanAveragePrecision()
 
@@ -32,7 +32,7 @@ class MyModelModule(pl.LightningModule):
     def validation_epoch_end(self, outputs):
         m = self.val_mAP.compute()
         m = {f'val_{k}': v for k, v in m.items()}
-        self.log_dict(m)
+        self.log_dict(m, prog_bar=True)
         self.val_mAP.reset()
 
     def test_step(self, batch, batch_idx):
@@ -43,7 +43,7 @@ class MyModelModule(pl.LightningModule):
     def test_epoch_end(self, outputs):
         m = self.test_mAP.compute()
         m = {f'test_{k}': v for k, v in m.items()}
-        self.log_dict(m)
+        self.log_dict(m, prog_bar=True)
         self.test_mAP.reset()
 
     def configure_optimizers(self):
