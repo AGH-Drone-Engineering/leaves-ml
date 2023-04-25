@@ -29,7 +29,7 @@ class MyModelModule(pl.LightningModule):
         y_hat = self.model(x)
         self.val_mAP.update(y_hat, y)
 
-    def validation_epoch_end(self, outputs):
+    def on_validation_epoch_end(self):
         m = self.val_mAP.compute()
         m = {f'val_{k}': v for k, v in m.items()}
         self.log_dict(m, prog_bar=True)
@@ -40,7 +40,7 @@ class MyModelModule(pl.LightningModule):
         y_hat = self.model(x)
         self.test_mAP.update(y_hat, y)
 
-    def test_epoch_end(self, outputs):
+    def on_test_epoch_end(self):
         m = self.test_mAP.compute()
         m = {f'test_{k}': v for k, v in m.items()}
         self.log_dict(m, prog_bar=True)

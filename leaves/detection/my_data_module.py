@@ -13,8 +13,8 @@ def bbox_transform(bbox):
 
 def target_transform(target):
     return {
-        'boxes': torch.tensor([bbox_transform(t['bbox']) for t in target]),
-        'labels': torch.tensor([t['category_id'] for t in target]),
+        'boxes': torch.tensor([bbox_transform(t['bbox']) for t in target]).reshape(-1, 4),
+        'labels': torch.tensor([t['category_id'] for t in target]).long(),
         'image_id': torch.tensor([t['image_id'] for t in target]),
         'area': torch.tensor([t['area'] for t in target]),
         'iscrowd': torch.tensor([t['iscrowd'] for t in target]),
